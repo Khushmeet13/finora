@@ -6,8 +6,6 @@ import {
   BarChart,
   Bar,
   ResponsiveContainer,
-  XAxis,
-  YAxis,
   Cell
 } from "recharts";
 

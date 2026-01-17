@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Button } from "../ui/button";
-import { TrendingUp, Calendar, Info, ChevronDown } from "lucide-react";
+import { Calendar, Info, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import {
     LineChart,

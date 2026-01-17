@@ -54,7 +54,7 @@ const netSalary = grossSalary - totalDeductions;
                     {/* Earnings Breakdown */}
                     <div className="space-y-5">
 
-                        {salaryBreakdown.map((item, idx) => (
+                        {salaryBreakdown.map((item, _idx) => (
                             <div key={item.label} className="group">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="font-medium">{item.label}</span>
@@ -165,7 +165,7 @@ const netSalary = grossSalary - totalDeductions;
               {/* Deductions Breakdown */}
               <div className="space-y-4">
 
-                {deductions.map((item, idx) => (
+                {deductions.map((item, _idx) => (
                   <div key={item.label} className="group">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium">{item.label}</span>

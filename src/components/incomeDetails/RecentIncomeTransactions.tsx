@@ -106,8 +106,8 @@ export default function RecentIncomeTransactions() {
               </thead>
               <tbody className="divide-y divide-primary/10">
                 {filteredTransactions.map((tx) => {
-                  const info = getSourceInfo(tx.sourceType);
-                  const Icon = info.icon;
+                  //const info = getSourceInfo(tx.sourceType);
+                  //const Icon = info.icon;
 
                   return (
                     <tr key={tx.id} className="transition-colors">

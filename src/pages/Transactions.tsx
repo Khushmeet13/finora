@@ -49,7 +49,7 @@ const months = [
 
 export default function TransactionsPage() {
   const [selectedMonth, setSelectedMonth] = useState("2026-01");
-  const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false);
+  //const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false);
 
   const handleMonthChange = (value: string) => {
     setSelectedMonth(value);
@@ -141,7 +141,7 @@ export default function TransactionsPage() {
 
                   All Status
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform ${isCustomRangeOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 transition-transform `}
                   />
                 </button>
 
@@ -152,7 +152,7 @@ export default function TransactionsPage() {
 
                   Latest
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform ${isCustomRangeOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 transition-transform `}
                   />
                 </button>
                 <Button className="bg-primary" size="icon"><Download className="h-4 w-4" /></Button>

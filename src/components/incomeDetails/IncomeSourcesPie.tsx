@@ -128,7 +128,7 @@ export default function IncomeSourcesPie() {
               onMouseEnter={(_, index) => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {incomeSources.map((entry, i) => (
+              {incomeSources.map((_entry, i) => (
                 <Cell
                   key={i}
                   fill={PIE_COLORS[i]}

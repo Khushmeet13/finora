@@ -1,4 +1,4 @@
-import { Home, Receipt, Target, Sparkles, TrendingUp, User, Search, Bell, FileText } from "lucide-react";
+import { Home, Receipt, Target, Sparkles, TrendingUp, User, Search, FileText } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -30,10 +30,10 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
 
-  const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    isActive
-      ? "bg-sidebar-accent text-sidebar-primary font-medium"
-      : "hover:bg-sidebar-accent/50 ";
+  // const getNavClass = ({ isActive }: { isActive: boolean }) =>
+  //   isActive
+  //     ? "bg-sidebar-accent text-sidebar-primary font-medium"
+  //     : "hover:bg-sidebar-accent/50 ";
 
   return (
     <Sidebar className={`${collapsed ? "w-22" : "w-64"} bg-slate-900 text-slate-100`} collapsible="icon">
