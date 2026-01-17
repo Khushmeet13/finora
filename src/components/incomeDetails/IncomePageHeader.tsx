@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ArrowLeft, Calendar, Filter, ChevronDown } from "lucide-react";
-import { format } from "date-fns";
 import { Link } from "react-router-dom"; // or your router
 
 // Available months (you can generate dynamically)
@@ -31,6 +30,20 @@ export default function IncomePageHeader() {
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
+        {/* <div className="flex items-center gap-4">
+          <Link to="/">
+            <button className="p-3 rounded-md bg-gray-50 hover:bg-muted transition-shadow shadow-sm">
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Income Overview</h1>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Track your earnings, sources, and growth at a glance
+            </p>
+          </div>
+        </div> */}
+        
       {/* Left: Back + Title */}
       <div className="flex items-center gap-4">
         <Link to="/">

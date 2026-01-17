@@ -1,151 +1,122 @@
-import { TrendingUp, TrendingDown, Wallet, PiggyBank } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
+import { Wallet, TrendingUp, TrendingDown, PiggyBank } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 
-// Replace these with your actual variables
-const totalIncome = 80000;      // totalMonthlyIncome
-const totalExpenses = 57600;    // total monthly expenses
+const totalIncome = 80000;
+const totalExpenses = 57600;
 const savings = totalIncome - totalExpenses;
-const savingsRate = totalIncome > 0 ? ((savings / totalIncome) * 100).toFixed(1) : "0";
-
+const savingsRate = totalIncome > 0 ? Math.round((savings / totalIncome) * 100) : 0;
 const isPositive = savings >= 0;
-
-const data = [
-  { name: "Income", amount: totalIncome, fill: "#22c55e" },
-  { name: "Expenses", amount: totalExpenses, fill: "#ef4444" },
-  { name: "Savings", amount: Math.abs(savings), fill: isPositive ? "#c57147" : "#ef4444" },
-];
 
 export default function IncomeVsExpensesComparison() {
   return (
-    <Card className="relative overflow-hidden shadow-xl bg-card/80 backdrop-blur-md border-0">
-      {/* Subtle tri-color gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-primary/5 to-red-500/5" />
-
-      <CardHeader className="relative pb-6">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-3 text-2xl font-bold">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <Wallet className="h-6 w-6 text-primary" />
-            </div>
-            Income vs Expenses
-          </CardTitle>
-
-          {/* Quick Status Badge */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isPositive ? "bg-green-500/10" : "bg-red-500/10"}`}>
-            {isPositive ? (
-              <TrendingUp className="h-5 w-5 text-green-600" />
-            ) : (
-              <TrendingDown className="h-5 w-5 text-red-600" />
-            )}
-            <span className={`font-medium ${isPositive ? "text-green-600" : "text-red-600"}`}>
-              {isPositive ? "Surplus" : "Deficit"}
-            </span>
+    <Card className="h-full bg-card/80 backdrop-blur-md border-0 shadow-md">
+      <CardHeader>
+        <CardTitle className="flex items-start gap-3 text-lg font-semibold max-w-sm">
+          <div className="p-2 rounded-lg bg-primary/5">
+            <Wallet className="h-6 w-6 text-primary" />
           </div>
-        </div>
-        <p className="text-muted-foreground mt-2">
-          Compare your earnings and spending for this month
-        </p>
+          <div>
+            Monthly Financial Health
+            <p className="text-sm text-muted-foreground font-normal">
+              Snapshot of your income, expenses & savings
+            </p>
+          </div>
+
+        </CardTitle>
+
       </CardHeader>
 
-      <CardContent className="relative">
-        {/* Bar Chart */}
-        <ResponsiveContainer width="100%" height={320}>
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
-            <CartesianGrid strokeDasharray="4 4" stroke="#e0e0e0" opacity={0.4} />
-            
-            <XAxis 
-              dataKey="name" 
-              tick={{ fontSize: 14, fontWeight: 600 }}
-              stroke="#888"
-            />
-            
-            <YAxis 
-              tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-              tick={{ fontSize: 12 }}
-              stroke="#888"
-            />
-            
-            <Tooltip 
-              formatter={(value: number) => `₹${value.toLocaleString()}`}
-              contentStyle={{
-                backgroundColor: "hsl(var(--background))",
-                borderRadius: "12px",
-                border: "none",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-              }}
-            />
-            
-            <Bar dataKey="amount" radius={[12, 12, 0, 0]}>
-              {data.map((entry, index) => (
-                <Cell key={index} fill={entry.fill} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-
-        {/* Highlight Section */}
-        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-primary/10 to-emerald-500/10 border-2 border-primary/30">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              {isPositive ? (
-                <PiggyBank className="h-14 w-14 text-primary" />
-              ) : (
-                <TrendingDown className="h-14 w-14 text-red-600" />
-              )}
-              <div>
-                <p className="text-sm uppercase tracking-wider text-muted-foreground">
-                  {isPositive ? "You Saved" : "You Overspent"}
-                </p>
-                <p className={`text-4xl font-extrabold mt-1 ${isPositive ? "text-primary" : "text-red-600"}`}>
-                  ₹{Math.abs(savings).toLocaleString()}
-                </p>
-              </div>
-            </div>
-
-            <div className="text-center sm:text-right">
-              <div className={`inline-flex items-center gap-3 px-6 py-4 rounded-full text-2xl font-bold ${
-                isPositive ? "bg-primary/20 text-primary" : "bg-red-500/20 text-red-600"
-              }`}>
-                <span>{savingsRate}%</span>
-                <span className="text-sm font-normal text-muted-foreground">
-                  of your income
-                </span>
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground">
-                {isPositive
-                  ? "🎉 Great job! You're building positive savings this month."
-                  : "💡 Consider reviewing expenses to get back on track."}
-              </p>
-            </div>
-          </div>
+      <CardContent className="space-y-6">
+        {/* Top Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <StatCard
+            label="Total Income"
+            value={`₹${totalIncome.toLocaleString()}`}
+            icon={<TrendingUp className="text-green-600" />}
+            bg="bg-green-500/10"
+          />
+          <StatCard
+            label="Total Expenses"
+            value={`₹${totalExpenses.toLocaleString()}`}
+            icon={<TrendingDown className="text-red-600" />}
+            bg="bg-red-500/10"
+          />
         </div>
 
-        {/* Legend */}
-        <div className="mt-6 flex justify-center gap-8 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-full bg-green-500" />
-            <span>Income</span>
+        {/* Savings Section */}
+        <div className={`p-5 rounded-xl border ${isPositive ? "border-primary/30 bg-gray-100/10" : "border-red-500/30 "}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {isPositive ? "You Saved" : "Overspent"}
+              </p>
+              <p className={`text-3xl font-bold mt-1 ${isPositive ? "text-primary" : "text-red-600"}`}>
+                ₹{Math.abs(savings).toLocaleString()}
+              </p>
+            </div>
+
+            {/* Progress Ring */}
+            <div className="relative w-20 h-20">
+              <svg className="w-full h-full rotate-[-90deg]">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  className="text-muted"
+                />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray={2 * Math.PI * 32}
+                  strokeDashoffset={
+                    2 * Math.PI * 32 -
+                    (Math.min(Math.abs(savingsRate), 100) / 100) * (2 * Math.PI * 32)
+                  }
+                  className={isPositive ? "text-primary" : "text-red-600"}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">
+                {Math.abs(savingsRate)}%
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-full bg-red-500" />
-            <span>Expenses</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded-full" style={{ backgroundColor: "#c57147" }} />
-            <span>Savings (Income − Expenses)</span>
-          </div>
+
+          <p className="text-sm text-muted-foreground mt-4">
+            {isPositive
+              ? "Great job! Your expenses are under control."
+              : "Expenses exceeded income. Consider revisiting spending."}
+          </p>
+        </div>
+
+        {/* Bottom Insight */}
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/40">
+          <PiggyBank className="h-6 w-6 text-primary" />
+          <p className="text-sm text-muted-foreground">
+            Saving at least <span className="font-medium text-foreground">20%</span> of income is considered financially healthy.
+          </p>
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+/* Small reusable stat card */
+function StatCard({ label, value, icon, bg }: any) {
+  return (
+    <div className={`p-4 rounded-xl ${bg} flex items-center justify-between`}>
+      <div>
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="text-xl font-bold mt-1">{value}</p>
+      </div>
+      <div className="p-2 rounded-lg ">{icon}</div>
+    </div>
   );
 }

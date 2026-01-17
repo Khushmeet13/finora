@@ -79,6 +79,44 @@ export default function IncomeSummaryCards() {
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        {/* <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            { label: "Total Monthly Income", value: `₹${totalMonthlyIncome.toLocaleString()}`, icon: Wallet },
+            { label: "Primary Salary (Net)", value: `₹${netSalary.toLocaleString()}`, icon: Briefcase },
+            { label: "Other Income", value: `₹${totalOtherIncome.toLocaleString()}`, icon: PiggyBank },
+            { label: "Growth vs Last Month", value: growthRate, icon: TrendingUp, isGrowth: true },
+            { label: "Deductions", value: `₹${totalDeductions.toLocaleString()}`, icon: CreditCard },
+          ].map((stat) => (
+            <Card
+              key={stat.label}
+              className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-transparent hover:border-primary/30 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80"
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                    <p
+                      className={`text-2xl font-semibold mt-2 ${stat.isGrowth
+                        ? parseFloat(growthRate.replace("%", "")) >= 0
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-600 dark:text-red-400"
+                        : "text-foreground"
+                        }`}
+                    >
+                      {stat.value}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-primary/10">
+                    <stat.icon className="h-5 w-5 text-primary" />
+                  </div>
+                </div>
+                {/* Optional subtle gradient overlay 
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-primary/5 to-transparent opacity-50" />
+              </CardContent>
+            </Card>
+          ))}
+        </div> */}
+        
       {statsData.map((stat) => {
         const Icon = stat.icon;
         const isExpanded = expandedCard === stat.label;

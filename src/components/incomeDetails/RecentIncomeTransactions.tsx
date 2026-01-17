@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { Calendar, Briefcase, PiggyBank, TrendingUp, CreditCard, Filter } from "lucide-react";
+import { Calendar, Briefcase, PiggyBank, TrendingUp, CreditCard, Filter, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../../components/ui/dropdown-menu";
+import { Button } from "../../components/ui/button";
 
 // Sample recent transactions - replace with your real data
 const recentTransactions = [
@@ -24,8 +31,8 @@ const allSources = ["All", ...Array.from(new Set(recentTransactions.map(t => t.s
 export default function RecentIncomeTransactions() {
   const [filter, setFilter] = useState("All");
 
-  const filteredTransactions = filter === "All" 
-    ? recentTransactions 
+  const filteredTransactions = filter === "All"
+    ? recentTransactions
     : recentTransactions.filter(t => t.source === filter);
 
   const getSourceInfo = (type: string) => {
@@ -33,35 +40,55 @@ export default function RecentIncomeTransactions() {
   };
 
   return (
-    <Card className="relative overflow-hidden shadow-xl bg-card/80 backdrop-blur-md border-0">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-emerald-500/5 to-blue-500/5" />
-      
+    <Card className="relative overflow-hidden shadow-md bg-card/80 backdrop-blur-md border-0">
+
       <CardHeader className="relative">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-3 text-2xl font-bold">
-            <div className="p-2 rounded-xl bg-primary/10">
+          <CardTitle className="flex items-start gap-3 text-lg font-semibold max-w-sm">
+            <div className="p-2 rounded-lg bg-primary/5">
               <Calendar className="h-6 w-6 text-primary" />
             </div>
-            Recent Income Transactions
+            <div>
+              Recent Income Transactions
+              <p className="text-muted-foreground font-normal text-sm">
+                Latest deposits and incoming payments
+              </p>
+            </div>
+
           </CardTitle>
 
           {/* Quick Filter */}
           <div className="flex items-center gap-2">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="bg-background/80 border border-primary/20 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              {allSources.map((source) => (
-                <option key={source} value={source}>{source}</option>
-              ))}
-            </select>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 bg-background/80 border-primary/20"
+                >
+                  {filter}
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="start" className="w-36">
+                {allSources.map((source) => (
+                  <DropdownMenuItem
+                    key={source}
+                    onClick={() => setFilter(source)}
+                    className="cursor-pointer"
+                  >
+                    {source}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+
         </div>
-        <p className="text-muted-foreground mt-2">
-          Latest deposits and incoming payments
-        </p>
+
       </CardHeader>
 
       <CardContent className="relative">
@@ -83,29 +110,25 @@ export default function RecentIncomeTransactions() {
                   const Icon = info.icon;
 
                   return (
-                    <tr key={tx.id} className="hover:bg-primary/5 transition-colors">
+                    <tr key={tx.id} className="transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-lg ${info.bg}`}>
-                            <Icon className={`h-5 w-5 ${info.color}`} />
-                          </div>
-                          <span className="font-medium">{tx.source}</span>
+                          <span className="font-medium text-sm">{tx.source}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-muted-foreground">
+                      <td className="px-6 py-2 text-muted-foreground text-sm">
                         {format(tx.date, "dd MMM yyyy")}
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="font-bold text-lg text-green-600">
+                      <td className="px-6 py-2 text-right">
+                        <span className="font-bold text-sm text-green-600">
                           +₹{tx.amount.toLocaleString()}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                          tx.status === "completed" 
-                            ? "bg-green-500/10 text-green-600" 
-                            : "bg-amber-500/10 text-amber-600"
-                        }`}>
+                      <td className="px-6 py-2 text-center">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${tx.status === "completed"
+                          ? "bg-green-500/10 text-green-600"
+                          : "bg-amber-500/10 text-amber-600"
+                          }`}>
                           {tx.status === "completed" ? "✓ Completed" : "⏳ Pending"}
                         </span>
                       </td>
@@ -145,11 +168,10 @@ export default function RecentIncomeTransactions() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className={`text-sm font-medium ${
-                    tx.status === "completed" 
-                      ? "text-green-600" 
-                      : "text-amber-600"
-                  }`}>
+                  <span className={`text-sm font-medium ${tx.status === "completed"
+                    ? "text-green-600"
+                    : "text-amber-600"
+                    }`}>
                     {tx.status === "completed" ? "✓ Completed" : "⏳ Pending"}
                   </span>
                 </div>

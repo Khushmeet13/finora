@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from "recharts";
 import { ChevronDown, AlertCircle, TrendingUp, Clock, PieChartIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 
@@ -29,59 +29,126 @@ const getStabilityInfo = (stability: string) => {
 
 export default function IncomeSourcesPie() {
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const totalIncome = incomeSources.reduce((s, i) => s + i.amount, 0);
+
+
 
   const handleSourceClick = (name: string) => {
     setSelectedSource(selectedSource === name ? null : name);
   };
 
+  const renderActiveShape = (props: any) => {
+    const {
+      cx,
+      cy,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+    } = props;
+
+    return (
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 7} // 👈 pop-out effect
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    );
+  };
+  const CustomPieTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const { name, value, color } = payload[0];
+      const percent = ((value / totalIncome) * 100).toFixed(1);
+
+      return (
+        <div className="bg-white/80 backdrop-blur-md border border-gray-200 shadow-lg rounded-xl px-4 py-1 min-w-[180px]">
+
+          {/* Colored line */}
+          <div
+            className="h-1 w-full rounded-full mb-1"
+            style={{ backgroundColor: color }}
+          />
+
+          <p className="text-sm font-semibold">{name}</p>
+
+          <p className="text-lg font-bold mt-1">
+            ₹{value.toLocaleString()}
+          </p>
+
+          <p className="text-xs text-muted-foreground mt-1">
+            {percent}% of total income
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+
+
+
+
   return (
-    <Card className="relative overflow-hidden shadow-xl bg-card/80 backdrop-blur-md border-0">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-500/5 to-emerald-500/5" />
-      
+    <Card className="h-full relative overflow-hidden shadow-md bg-card/80 backdrop-blur-md border-0">
+
       <CardHeader className="relative">
-        <CardTitle className="flex items-center gap-3 text-2xl font-bold">
-          <div className="p-2 rounded-xl bg-primary/10">
-            <PieChartIcon className="h-6 w-6 text-primary" /> {/* You can use a custom icon or lucide */}
+        <CardTitle className="flex items-start gap-3 text-lg font-semibold max-w-sm">
+          <div className="p-2 rounded-lg bg-primary/5">
+            <PieChartIcon className="h-6 w-6 text-primary" />
           </div>
-          Income Sources Breakdown
+          <div>
+            Income Sources Breakdown
+            <p className="text-muted-foreground font-normal text-sm">
+              Click on any source to see reliability details
+            </p>
+          </div>
+
         </CardTitle>
-        <p className="text-muted-foreground mt-2">
-          Click on any source to see reliability details
-        </p>
+
       </CardHeader>
 
-      <CardContent className="relative">
-        <ResponsiveContainer width="100%" height={300}>
+      <CardContent className="relative flex-1">
+        <ResponsiveContainer width="100%" height={200} className="mb-2">
           <PieChart>
             <Pie
               data={incomeSources}
               dataKey="amount"
               nameKey="name"
-              innerRadius={70}
-              outerRadius={110}
+              innerRadius={55}
+              outerRadius={85}
               paddingAngle={4}
-              cursor="pointer"
-              onClick={(data) => handleSourceClick(data.name)}
+              activeIndex={activeIndex ?? undefined}
+              activeShape={renderActiveShape}
+              onMouseEnter={(_, index) => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
             >
               {incomeSources.map((entry, i) => (
                 <Cell
                   key={i}
                   fill={PIE_COLORS[i]}
-                  stroke={selectedSource === entry.name ? "#fff" : undefined}
-                  strokeWidth={selectedSource === entry.name ? 4 : 0}
-                  className="transition-all duration-300 hover:opacity-80"
+                  className="transition-all duration-300"
                 />
+
               ))}
             </Pie>
+
+
             <Tooltip
-              formatter={(value: number) => `₹${value.toLocaleString()}`}
-              contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
+              content={<CustomPieTooltip />}
+              cursor={{ fill: "transparent" }}
             />
+
           </PieChart>
         </ResponsiveContainer>
 
         {/* Legend + Clickable Sources with Expandable Details */}
-        <div className="mt-8 space-y-4">
+        <div className="">
           {incomeSources.map((source, i) => {
             const stability = getStabilityInfo(source.stability);
             const isExpanded = selectedSource === source.name;
@@ -89,29 +156,27 @@ export default function IncomeSourcesPie() {
             return (
               <div
                 key={source.name}
-                className={`
-                  rounded-xl border transition-all duration-500 overflow-hidden
-                  ${isExpanded ? "shadow-lg border-primary/30" : "border-transparent hover:border-primary/20"}
-                  bg-card/50 backdrop-blur-sm cursor-pointer
-                `}
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
                 onClick={() => handleSourceClick(source.name)}
+                className={`
+    rounded-xl pt-2 border transition-all duration-500 overflow-hidden
+    ${isExpanded ? "shadow-md border-primary/30" : "border-transparent hover:border-primary/20"}
+    bg-card/50 backdrop-blur-sm cursor-pointer
+  `}
               >
+
                 {/* Main Row */}
-                <div className="p-4 flex items-center justify-between">
+                <div className="p-1 px-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-5 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: PIE_COLORS[i] }} />
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: PIE_COLORS[i] }} />
                     <div>
                       <p className="font-semibold">{source.name}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-muted-foreground">{source.frequency}</span>
-                        <span className={`text-xs font-bold ${stability.color}`}>
-                          {stability.emoji} {stability.label}
-                        </span>
-                      </div>
+
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg">₹{source.amount.toLocaleString()}</p>
+                    <p className="font-bold text-md">₹{source.amount.toLocaleString()}</p>
                     <p className="text-xs text-muted-foreground">
                       {((source.amount / incomeSources.reduce((s, t) => s + t.amount, 0)) * 100).toFixed(1)}%
                     </p>
@@ -144,11 +209,10 @@ export default function IncomeSourcesPie() {
                 </div>
 
                 {/* Chevron Indicator */}
-                <div className="absolute top-4 right-4 pointer-events-none">
+                <div className="absolute -top-6 -right-1 pointer-events-none">
                   <ChevronDown
-                    className={`h-5 w-5 text-muted-foreground transition-transform duration-500 ${
-                      isExpanded ? "rotate-180" : ""
-                    }`}
+                    className={`h-5 w-5 text-muted-foreground transition-transform duration-500 ${isExpanded ? "rotate-180" : ""
+                      }`}
                   />
                 </div>
               </div>
@@ -156,12 +220,6 @@ export default function IncomeSourcesPie() {
           })}
         </div>
 
-        {/* Overall Insight */}
-        <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/20">
-          <p className="text-sm text-center text-muted-foreground">
-            <span className="font-medium">Tip:</span> Aim for <span className="text-green-600 font-bold">60%+</span> from 🟢 Stable sources for financial security
-          </p>
-        </div>
       </CardContent>
     </Card>
   );

@@ -149,3 +149,31 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Rounded brush background */
+/* Main brush area – rounded fill + rounded stroke ends */
+.rounded-brush .recharts-brush-slide {
+  rx: 14;
+  ry: 14;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* Traveller rectangle */
+.rounded-brush .recharts-brush-traveller rect {
+  rx: 12;
+  ry: 12;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* Traveller paths (side handles) */
+.rounded-brush .recharts-brush-traveller path {
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+
+.rounded-brush .recharts-brush-slide {
+  filter: drop-shadow(0 4px 8px rgba(42,167,201,0.25));
+}
