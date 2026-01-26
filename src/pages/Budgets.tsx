@@ -1,7 +1,7 @@
 import BudgetActionsFAB from "../components/budget/BudgetActionsFAB";
 import BudgetAlerts from "../components/budget/BudgetAlerts";
 import BudgetCards from "../components/budget/BudgetCards";
-import BudgetFilters from "../components/budget/BudgetFilters";
+//import BudgetFilters from "../components/budget/BudgetFilters";
 import BudgetHealthScore from "../components/budget/BudgetHealthScore";
 import BudgetSuggestions from "../components/budget/BudgetSuggestions";
 import BudgetVsSpentChart from "../components/budget/BudgetVsSpentChart";
@@ -51,21 +51,13 @@ const categoryBudgetData = [
   }
 ];
 
-const last6MonthsSpending = [
-  18500,    // July
-  17200,    // August
-  19800,    // September
-  13400,    // October
-  15600,    // November
-  13500     // December
-];
 
 export default function BudgetOverview() {
 
 
   return (
     <div className="space-y-5">
-      <BudgetFilters />
+ 
       <BudgetCards />
       <CategoryBudget />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
@@ -80,6 +72,7 @@ export default function BudgetOverview() {
          
         </div>
       </div>
+      
        <MonthlyTrendChart monthlyData={[18500, 17200, 19800, 13400, 15600, 13500]} />
        <BudgetAlerts />
        <BudgetSuggestions />

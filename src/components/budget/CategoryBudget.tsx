@@ -20,7 +20,7 @@ export default function CategoryBudget() {
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-semibold mb-4">Category Breakdown</h2>
+      <h2 className="text-lg font-semibold mb-4 tracking-tight">Category Breakdown</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {categories.map((cat, i) => {
@@ -48,7 +48,7 @@ export default function CategoryBudget() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07, duration: 0.4 }}
               className={`
-                bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition-all
+                bg-white border rounded-lg p-4 shadow-md hover:shadow-md transition-all
                 ${status === "over" ? "border-red-200" : ""}
                 ${status === "warning" ? "border-amber-200" : ""}
                 h-full flex flex-col
@@ -91,7 +91,7 @@ export default function CategoryBudget() {
 
               {/* Progress Bar */}
               <div className="mt-auto">
-                <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.min(percentage, 100)}%` }}

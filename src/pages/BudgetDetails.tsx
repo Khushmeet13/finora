@@ -1,55 +1,153 @@
-import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
-import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Progress } from "../components/ui/progress";
+import { IndianRupee, Pencil, TrendingUp } from "lucide-react";
+import BudgetSummary from "../components/remainingBudget/BudgetSummary";
+import BudgetProgress from "../components/remainingBudget/BudgetProgress";
+import CategoryBudget from "../components/remainingBudget/CategoryBudget";
+import DailyLimit from "../components/remainingBudget/DailyLimit";
+import Alerts from "../components/remainingBudget/Alerts";
+import SpendingTrend from "../components/remainingBudget/SpendingTrend";
+import QuickActions from "../components/remainingBudget/QuickActions";
+import BudgetHeader from "../components/remainingBudget/BudgetHeader";
+import { useState } from "react";
 
 export default function BudgetDetails() {
+    const [openEditBudget, setOpenEditBudget] = useState(false);
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
 
-            <div className="flex items-center gap-3">
-                <Link to="/">
-                    <button className="p-2 rounded-lg hover:bg-muted transition">
-                        <ArrowLeft className="h-5 w-5" />
-                    </button>
-                </Link>
-
-                <h1 className="text-3xl font-bold">Budget Overview</h1>
-            </div>
-            <p className="text-muted-foreground -mt-3 mb-4">
-                Your remaining balance & allocations.
-            </p>
-
-            {/* Big Remaining Card */}
-            <div className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl border">
-                <p className="text-sm text-muted-foreground">Remaining</p>
-                <p className="text-4xl font-bold mt-1">$1,600</p>
-                <p className="text-sm text-muted-foreground mt-2">
-                    You're on track this month. Good job!
-                </p>
+            <BudgetHeader />
+            <BudgetSummary />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <BudgetProgress />
+                <DailyLimit />
             </div>
 
-            {/* Category Progress */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Category Budgets</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    {[
-                        { name: "Food", spent: 450, total: 600 },
-                        { name: "Shopping", spent: 320, total: 400 },
-                        { name: "Transport", spent: 180, total: 200 },
-                    ].map((c) => (
-                        <div key={c.name}>
-                            <div className="flex justify-between text-sm mb-1">
-                                <span>{c.name}</span>
-                                <span>${c.spent} / ${c.total}</span>
-                            </div>
-                            <Progress value={(c.spent / c.total) * 100} className="h-2" />
+            <CategoryBudget />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <Alerts />
+                <SpendingTrend />
+            </div>
+            <QuickActions />
+
+            <button
+                onClick={() => setOpenEditBudget(true)}
+                className="
+                    fixed bottom-2 right-5 z-50
+                    flex items-center gap-3
+
+                    rounded-full
+                    bg-primary text-white
+                    shadow-xl
+
+                    px-5 py-3
+                    text-sm font-medium
+
+                    hover:shadow-2xl hover:scale-105
+                    active:scale-95
+                    transition-all duration-300
+                "
+            >
+                <Pencil className="h-5 w-5" />
+                <span className="hidden sm:inline">Edit Budget</span>
+            </button>
+
+            {openEditBudget && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div className="w-full max-w-xl rounded-2xl bg-background shadow-xl p-6 space-y-6">
+
+                        {/* Header */}
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold">Edit Monthly Budget</h2>
+                            <button
+                                onClick={() => setOpenEditBudget(false)}
+                                className="text-muted-foreground hover:text-foreground"
+                            >
+                                ✕
+                            </button>
                         </div>
-                    ))}
-                </CardContent>
-            </Card>
+
+                        {/* Form */}
+                        <div className="space-y-4">
+
+                            {/* Total Budget */}
+                            <div>
+                                <label className="text-sm font-medium">Total Monthly Budget</label>
+                                <div className="flex items-center gap-2 mt-1 border rounded-lg px-3 py-2">
+                                    <IndianRupee className="h-4 w-4 text-muted-foreground" />
+                                    <input
+                                        type="number"
+                                        placeholder="Enter total budget"
+                                        className="w-full bg-transparent outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Month */}
+                            <div>
+                                <label className="text-sm font-medium">Month</label>
+                                <input
+                                    type="month"
+                                    className="w-full mt-1 border rounded-lg px-3 py-2"
+                                />
+                            </div>
+
+                            {/* Category Budgets */}
+                            <div className="space-y-3">
+                                <p className="text-sm font-medium">Category Allocation</p>
+
+                                {["Food", "Travel", "Shopping"].map((cat) => (
+                                    <div key={cat} className="flex items-center gap-3">
+                                        <span className="w-24 text-sm text-muted-foreground">
+                                            {cat}
+                                        </span>
+                                        <div className="flex-1 flex items-center gap-2 border rounded-lg px-3 py-2">
+                                            <IndianRupee className="h-4 w-4 text-muted-foreground" />
+                                            <input
+                                                type="number"
+                                                placeholder="Amount"
+                                                className="w-full bg-transparent outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Rollover Option */}
+                            <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 border">
+                                <input type="checkbox" className="h-4 w-4" />
+                                <p className="text-sm text-muted-foreground">
+                                    Carry forward remaining budget to next month
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Smart Insight */}
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                            <TrendingUp className="h-5 w-5 text-emerald-600" />
+                            <p className="text-sm text-emerald-700">
+                                Increasing budget by 5% keeps you safe based on last month’s spend
+                            </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3 pt-4">
+                            <button
+                                onClick={() => setOpenEditBudget(false)}
+                                className="flex-1 rounded-xl border py-2"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="flex-1 rounded-xl bg-slate-900 text-white py-2 hover:bg-slate-800 transition"
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 }

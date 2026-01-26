@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import BudgetFilters from "./BudgetFilters";
 
 export default function BudgetCards() {
   const [month, setMonth] = useState("January 2025");
@@ -9,7 +10,7 @@ export default function BudgetCards() {
     {
       title: "Total Budget",
       amount: 20000,
-      color: "bg-indigo-50 text-indigo-700",
+      color: "bg-primary/10 text-primary",
       progress: 100,
       extra: "Monthly limit",
     },
@@ -34,9 +35,14 @@ export default function BudgetCards() {
     <div className="space-y-5">
       {/* Header - compact */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Budget Overview</h2>
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">Budget Overview</h2>
+          <p className="text-sm text-muted-foreground">
+            See where your money stands this month.
+          </p>
+        </div>
 
-        <div className="flex items-center gap-1.5 bg-white border rounded-full px-3 py-1.5 shadow-sm">
+        {/* <div className="flex items-center gap-1.5 bg-white border rounded-full px-3 py-1.5 shadow-sm">
           <button
             onClick={() => setMonth("December 2024")}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -52,7 +58,8 @@ export default function BudgetCards() {
           >
             <ChevronRight size={16} className="text-gray-500" />
           </button>
-        </div>
+        </div> */}
+        <BudgetFilters />
       </div>
 
       {/* Compact Cards */}
@@ -65,7 +72,7 @@ export default function BudgetCards() {
             transition={{ delay: i * 0.08, duration: 0.4 }}
             whileHover={{ y: -3, transition: { duration: 0.2 } }}
             className={`
-              bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow
+              bg-white border rounded-lg p-4 shadow-md hover:shadow-md transition-shadow
               ${stat.isPositive ? "border-emerald-200" : ""}
             `}
           >
@@ -88,13 +95,12 @@ export default function BudgetCards() {
                 initial={{ width: 0 }}
                 animate={{ width: `${stat.progress}%` }}
                 transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
-                className={`h-full rounded-full ${
-                  stat.title === "Spent"
+                className={`h-full rounded-full ${stat.title === "Spent"
                     ? "bg-rose-500"
                     : stat.title === "Remaining"
-                    ? "bg-emerald-500"
-                    : "bg-indigo-400"
-                }`}
+                      ? "bg-emerald-500"
+                      : "bg-primary"
+                  }`}
               />
             </div>
 
@@ -104,8 +110,8 @@ export default function BudgetCards() {
                 {stat.title === "Spent"
                   ? `${((stat.amount / 20000) * 100).toFixed(0)}% used`
                   : stat.title === "Remaining"
-                  ? `${((stat.amount / 20000) * 100).toFixed(0)}% left`
-                  : "Fixed"}
+                    ? `${((stat.amount / 20000) * 100).toFixed(0)}% left`
+                    : "Fixed"}
               </span>
               {stat.isPositive && (
                 <span className="text-emerald-600 font-medium">On track ✓</span>
