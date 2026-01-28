@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
 import BudgetFilters from "./BudgetFilters";
 
 export default function BudgetCards() {
-  const [month, setMonth] = useState("January 2025");
 
   const stats = [
     {

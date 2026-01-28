@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CalendarDays, Clock, AlertCircle } from "lucide-react";
+import { CalendarDays, AlertCircle } from "lucide-react";
 
 export default function DaysLeftIndicator() {
   // Current date: January 19, 2026 (example)
