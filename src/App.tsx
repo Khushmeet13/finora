@@ -17,6 +17,8 @@ import IncomeDetails from "./pages/IncomeDetails";
 import ExpenseDetails from "./pages/ExpenseDetails";
 import BudgetDetails from "./pages/BudgetDetails";
 import TransactionsDetails from "./pages/TransactionDetails";
+import { Navigate } from "react-router-dom";
+import FinoraAuthPage from "./pages/FinoraAuthPage";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +29,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+           <Route path="/login" element={<FinoraAuthPage />} />
+
+          {/* Redirect root to login */}
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
           <Route path="/transactions" element={<DashboardLayout><Transactions /></DashboardLayout>} />
           <Route path="/budgets" element={<DashboardLayout><Budgets /></DashboardLayout>} />
           <Route path="/recommendations" element={<DashboardLayout><Recommendations /></DashboardLayout>} />
